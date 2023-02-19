@@ -2,6 +2,7 @@ const fs = require("fs");
 const bodyParser = require("body-parser");
 const jsonServer = require("json-server");
 const jwt = require("jsonwebtoken");
+const router = jsonServer.router("./database.json");
 
 const server = jsonServer.create();
 const userdb = JSON.parse(fs.readFileSync("./users.json", "utf-8"));
@@ -12,7 +13,7 @@ server.use(jsonServer.defaults());
 
 const SECRET_KEY = "72676376";
 
-const expiresIn = "1h";
+const expiresIn = "2h";
 
 function createToken(payload) {
   return jwt.sign(payload, SECRET_KEY, { expiresIn });
@@ -80,6 +81,7 @@ server.post("/api/auth/login", (req, res) => {
   const access_token = createToken({ email, password });
   res.status(200).json({ access_token });
 });
+server.use(router);
 
 server.listen(5000, () => {
   console.log("Running fake api json server");
