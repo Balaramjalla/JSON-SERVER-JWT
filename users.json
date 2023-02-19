@@ -1,3 +1,11 @@
 {
-  "users": [{ "id": 2, "email": "test@gmail.com", "password": "123456","firstName":"Balaram","lastName":"Jalla" }]
+  "users": [
+    {
+      "id": 2,
+      "email": "test@gmail.com",
+      "password": "123456",
+      "firstName": "Balaram",
+      "lastName": "Jalla"
+    }
+  ]
 }
