@@ -2,6 +2,7 @@ const fs = require("fs");
 const bodyParser = require("body-parser");
 const jsonServer = require("json-server");
 const jwt = require("jsonwebtoken");
+const router = jsonServer.router("./database.json");
 
 const server = jsonServer.create();
 const userdb = JSON.parse(fs.readFileSync("./users.json", "utf-8"));
@@ -80,6 +81,7 @@ server.post("/api/auth/login", (req, res) => {
   const access_token = createToken({ email, password });
   res.status(200).json({ access_token });
 });
+server.use(router);
 
 server.listen(5000, () => {
   console.log("Running fake api json server");
