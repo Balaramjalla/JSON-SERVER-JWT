@@ -13,7 +13,7 @@ server.use(jsonServer.defaults());
 
 const SECRET_KEY = "72676376";
 
-const expiresIn = "2h";
+const expiresIn = "1h";
 
 function createToken(payload) {
   return jwt.sign(payload, SECRET_KEY, { expiresIn });
@@ -32,7 +32,7 @@ function isRegisterAuthenticated({ email }) {
 }
 
 server.post("/api/auth/register", (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, firstName, lastName } = req.body;
   if (isRegisterAuthenticated({ email })) {
     const status = 401;
     const message = "Email already exist";
@@ -51,7 +51,13 @@ server.post("/api/auth/register", (req, res) => {
 
     let last_item_id = data.users[data.users.length - 1].id;
 
-    data.users.push({ id: last_item_id + 1, email: email, password: password });
+    data.users.push({
+      id: last_item_id + 1,
+      email: email,
+      password: password,
+      firstName: firstName,
+      lastName: lastName,
+    });
     let writeData = fs.writeFile(
       "./users.json",
       JSON.stringify(data),
@@ -65,8 +71,8 @@ server.post("/api/auth/register", (req, res) => {
       }
     );
   });
-  const access_token = createToken({ email, password });
-  res.status(200).json({ access_token });
+  const access_token = createToken({ email, password, firstName, lastName });
+  res.status(200).json({ access_token, firstName, lastName });
 });
 
 server.post("/api/auth/login", (req, res) => {
@@ -78,8 +84,8 @@ server.post("/api/auth/login", (req, res) => {
     res.status(status).json({ status, message });
     return;
   }
-  const access_token = createToken({ email, password });
-  res.status(200).json({ access_token });
+  const access_token = createToken({ email, password, firstName, lastName });
+  res.status(200).json({ access_token, firstName, lastName });
 });
 server.use(router);
 
