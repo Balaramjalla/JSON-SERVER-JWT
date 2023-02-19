@@ -47,6 +47,7 @@ server.post("/api/auth/register", (req, res) => {
       res.status(status).json({ status, message });
       return;
     }
+
     data = JSON.parse(data.toString());
 
     let last_item_id = data.users[data.users.length - 1].id;
@@ -58,6 +59,7 @@ server.post("/api/auth/register", (req, res) => {
       firstName: firstName,
       lastName: lastName,
     });
+
     let writeData = fs.writeFile(
       "./users.json",
       JSON.stringify(data),
@@ -72,11 +74,11 @@ server.post("/api/auth/register", (req, res) => {
     );
   });
   const access_token = createToken({ email, password, firstName, lastName });
-  res.status(200).json({ access_token, firstName, lastName });
+  res.status(200).json({ access_token, firstName, lastName, email });
 });
 
 server.post("/api/auth/login", (req, res) => {
-  const { email, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
 
   if (!isLoginAuthenticated({ email, password })) {
     const status = 401;
@@ -85,10 +87,10 @@ server.post("/api/auth/login", (req, res) => {
     return;
   }
   const access_token = createToken({ email, password, firstName, lastName });
-  res.status(200).json({ access_token, firstName, lastName });
+  res.status(200).json({ access_token, firstName, lastName, email });
 });
 server.use(router);
- 
+
 server.listen(5000, () => {
   console.log("Running fake api json server");
 });
