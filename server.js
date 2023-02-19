@@ -88,7 +88,7 @@ server.post("/api/auth/login", (req, res) => {
   res.status(200).json({ access_token, firstName, lastName });
 });
 server.use(router);
-
+ 
 server.listen(5000, () => {
   console.log("Running fake api json server");
 });
